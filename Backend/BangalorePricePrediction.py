@@ -2,7 +2,8 @@ import pickle
 import json
 import numpy as np
 from os import path
-
+import pandas as pd
+import math
 availability_values = None
 area_values = None
 location_values = None
@@ -23,7 +24,7 @@ def load_saved_attributes():
         location_values = resp["location_columns"]
 
     model = pickle.load(open("banglore_home_prices_model.pickle", "rb"))
-
+    print(model)
 def get_location_names():
     #if location_values == None:
     #  load_saved_attributes()
@@ -38,7 +39,15 @@ def get_area_values():
     #if area_values == None:
     #   load_saved_attributes()
     return area_values
-
+def getsites(page,size):
+    df = pd.read_csv('Bengaluru_House_Data.csv')
+    f = (page-1)*size
+    t=f+size
+    min_data = df[f:t]
+    totalItems = df.shape[0]
+    totalPages = math.ceil(totalItems/size)
+    currenpage= page
+    return [tuple(min_data.T.to_dict().values()),totalItems,totalPages,currenpage]
 def predict_house_price(location, area, availability, sqft, bhk, bathrooms):
     #load_saved_attributes()
     try:
