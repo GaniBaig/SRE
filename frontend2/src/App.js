@@ -8,6 +8,7 @@ import {FloatButton} from "antd";
 import {MessageFilled} from "@ant-design/icons";
 import {AiOutlineWhatsApp,AiOutlineMessage,} from "react-icons/ai";
 import BuyAsset from './components/BuyAsset';
+import SellAssest from './components/SellAssest'
 function App() {
   return (
     <Router>
@@ -22,6 +23,7 @@ function App() {
       <Route exact path="/" element={<Page1 />}/>
       <Route path="/predict" element={<Page2/>}/>
       <Route path='/buyasset' element={<BuyAsset/>}/>
+      <Route path='/sellasset' element={<SellAssest/>}/>
     </Routes>
     </Router>
   );

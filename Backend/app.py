@@ -63,11 +63,17 @@ def add_site():
     bath = request.form['bath']
     balcony = request.form['balcony']
     price = request.form['price']
-    f = open('nyc_weather.csv','a')
+    f = open('Bengaluru_House_Data.csv','a')
     writer = csv.writer(f)
     row=[area_type,availability,location,size,society,total_sqft,bath,balcony,price]
+    writer.writerow([])
     writer.writerow(row)
     f.close()
+    response = jsonify({
+        'status': 200
+    })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 @app.route("/")
 @cross_origin()
 def home():
