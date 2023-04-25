@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import cross_origin
 import BangalorePricePrediction as tm
-
+import csv;
 app = Flask(__name__)
 
 @app.route('/get_location_names', methods=['GET'])
@@ -37,6 +37,40 @@ def get_pridicted_price():
     availability = request.form.get('avail')
     response = jsonify({
         'prediction': round(float(tm.predict_house_price(loc, area, availability, sqft, bhk, bath)), 2)
+    })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+@app.route('/get_sites',methods=['GET'])
+def get_all_sites():
+    args = request.args
+    data = tm.getsites(int(args.get("page")),int(args.get('size')))
+    response = jsonify({
+        'data': data[0],
+        'totalItems':data[1],
+        'totalPages':data[2],
+        'currentPage':data[3]
+    })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+@app.route('/add_site', methods=['POST'])
+def add_site():
+    area_type = request.form['area_type']
+    availability = request.form['availability']
+    location = request.form['location']
+    size = request.form['size']
+    society = request.form['society']
+    total_sqft = request.form['total_sqft']
+    bath = request.form['bath']
+    balcony = request.form['balcony']
+    price = request.form['price']
+    f = open('Bengaluru_House_Data.csv','a')
+    writer = csv.writer(f)
+    row=[area_type,availability,location,size,society,total_sqft,bath,balcony,price]
+    writer.writerow([])
+    writer.writerow(row)
+    f.close()
+    response = jsonify({
+        'status': 200
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
